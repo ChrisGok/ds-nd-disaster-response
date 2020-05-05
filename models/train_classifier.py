@@ -1,3 +1,4 @@
+# import packages
 import sys
 
 import re
@@ -22,26 +23,47 @@ nltk.download('stopwords')
 nltk.download('punkt')
 nltk.download('wordnet')
 
+# Load data 
 def load_data(database_filepath):
-    """Description"""
+    """
+    Function loads SQL table from specified database_filepath
+    
+    Parameters:
+        database_filepath (str): string to database.
+
+    Returns:
+        X values, y values, categories 
+    """
+    # connect to database and load SQL table
     engine = create_engine('sqlite:///{}'.format(database_filepath))
     df = pd.read_sql_table('messages_categories', con=engine)
+    
+    # prepare X and y data sets
     X = df['message'].values
     y = df.drop(['id', 'message', 'original','genre'],axis=1)
     y = y.astype(int)
+    
+    # get category names from y
     category_names = y.columns
 
     return X, y, category_names
 
 
 def tokenize(text):
-    """Description"""
+    """
+    Function prepares text data using tokenization, lemmatization,
+    removal of stop words, normalization 
+    
+    Parameters:
+        text: string 
+
+    Returns:
+        clean_tokens: list of clean tokenized words
+    """
+    
     # initialize lemmatizer and define stop words
     lemmatizer = WordNetLemmatizer()
     stop_words = stopwords.words('english')
-    
-    # normalize case and remove punctuations
-    # text = re.sub(r"[^a-zA-Z0-9]"," ", text.lower())
     
     # tokenize text
     tokens = word_tokenize(text)
@@ -50,9 +72,9 @@ def tokenize(text):
     clean_tokens = []
     for tok in tokens:
         if tok not in stop_words:
-            # lemmatize and remove stop words
+            # normalize case and remove punctuations
             clean_tok = re.sub(r"[^a-zA-Z0-9]"," ", tok.lower().strip())
-            # clean_tok = [lemmatizer.lemmatize(word) for word in clean_tok if word not in stop_words]
+            # lemmatize and remove stop words
             clean_tok = lemmatizer.lemmatize(clean_tok).lower().strip()
             clean_tokens.append(clean_tok)
     
@@ -60,7 +82,18 @@ def tokenize(text):
 
 
 def build_model():
-    """Description"""
+    """
+    Function set up NLP-Pipeline using CountVectorizer, TfidfTransformer and 
+    MultiOutputClassifier(RandomForestClassifier) for the pipeline which is input for
+    GridSearch.
+    Only certain parameters are considered for GridSearch. 
+    
+    Parameters:
+        None 
+
+    Returns:
+        model: model optimized with GridSearch
+    """
 
     pipeline = Pipeline([
         ('text_pipeline', Pipeline([
@@ -71,17 +104,28 @@ def build_model():
 
     parameters = {
         'clf__estimator__n_estimators': [50,100],
-        'clf__estimator__min_samples_split': [2, 3],
+        'clf__estimator__min_samples_split': [3, 4],
         'text_pipeline__tfidf__use_idf': (True, False)
     }
 
-    cv = GridSearchCV(pipeline, param_grid=parameters, verbose=2, n_jobs=4)
+    model = GridSearchCV(pipeline, param_grid=parameters, verbose=2, n_jobs=4)
 
-    return cv
+    return model
 
 
 def evaluate_model(model, X_test, y_test, category_names):
-    """Description"""
+    """
+    Function to evaluate the model performance using sklearns classification_report
+
+    Parameters:
+        model: ML model
+        X_test: test data set for dependent variable
+        y_test: test data set for target variable
+        category_names: list of names used for classification_report
+
+    Returns:
+        prints the results of the classification_report for all categories
+    """
     
     y_pred = model.predict(X_test)
     
@@ -90,6 +134,16 @@ def evaluate_model(model, X_test, y_test, category_names):
 
 
 def save_model(model, model_filepath):
+    """
+    Function saves the model to a pickle file.
+    
+    Parameters:
+        model: ML model
+        model_filepath: name / path of the saved model
+
+    Returns:
+        None
+    """
     pickle.dump(model, open(model_filepath, 'wb'))
 
 
