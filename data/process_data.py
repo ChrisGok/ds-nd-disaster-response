@@ -40,10 +40,6 @@ def clean_data(df):
 
     # select the first row of the categories dataframe
     row = categories[:1]
-
-    # use this row to extract a list of new column names for categories.
-    # one way is to apply a lambda function that takes everything 
-    # up to the second to last character of each string with slicing
     category_colnames = [row.iloc[0][col][:-2] for col in row]
 
     # rename the columns of `categories`
@@ -55,7 +51,6 @@ def clean_data(df):
     
     # convert column from string to numeric
     categories[column] = pd.to_numeric(categories[column].astype(str))
-
 
     # drop the original categories column from `df`
     df.drop('categories', axis=1, inplace=True)
