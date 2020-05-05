@@ -12,11 +12,13 @@ The ETL pipeline uses two datasets as inputs which contain messages and already 
 
 ### **2. ML Pipeline**
 
-The ML pipeline uses CountVectorizer and TfidfTransfomer for the text data and predicts catgories with the help of an MultiOutputClassifier in connection with Random Forests. <br> GridSearch is used to find the best model for certain predefined parameters. The model is saved as a pickle file for further usage within the web app. 
+The ML pipeline uses CountVectorizer and TfidfTransfomer for the text data and predicts catgories with the help of an MultiOutputClassifier in connection with Random Forests. <br> GridSearch is used to find the best model for certain predefined parameters. GridSearch takes a while to run, so remember to adjust the parameters. The model is saved as a pickle file for further usage within the web app. <br>
+Since the data is unbalanced 
 
 ### **3. Web App**
 
-The web app allows for new text messages which are classified in the given categories using the ML model build in step 2.
+The web app allows for new text messages which are classified in the given categories using the ML model build in step 2. <br>
+A brief overview is provided for the underlying data as shown in the figures of the app. Since we deal with an unbalanced data set having many observations for certain categories while only a few for other categories, the results of the classification test should be interpreted with caution.
 
 ## How to use
 
@@ -27,5 +29,9 @@ The web app allows for new text messages which are classified in the given categ
     - To run ML pipeline that trains classifier and saves <br>
         `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
 
-2. Run the following command in the app's directory to run your web app.
+2. Run the following command in the app's directory to run your web app. <br>
     `python run.py`
+    you can use `localhost:3001`
+
+## License
+The data was provided by Udactiy Partner FigureEight. The web app code was only slightly adjusted and was also provided by Udacity.
