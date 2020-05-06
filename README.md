@@ -8,7 +8,7 @@ The project consists of three parts:
 
 ### **1. ETL Pipeline**
 
-The ETL pipeline uses two datasets as inputs which contain messages and already defined categories to those messages. <br> The pipeline merges both tables, cleans the data and finally loads the data into a SQLlite database.
+The ETL pipeline uses two datasets as inputs which contain messages and already defined categories to those messages. <br> The pipeline merges both tables, cleans the data and finally loads the data into a SQLlite database. The data files need to be stored in the folder `/data`.
 
 ### **2. ML Pipeline**
 
