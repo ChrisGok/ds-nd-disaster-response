@@ -18,16 +18,16 @@ Since the data is unbalanced
 ### **3. Web App**
 
 The web app allows for new text messages which are classified in the given categories using the ML model build in step 2. <br>
-A brief overview is provided for the underlying data as shown in the figures of the app. Since we deal with an unbalanced data set having many observations for certain categories while only a few for other categories, the results of the classification test should be interpreted with caution.
+A brief overview is provided for the underlying data as shown in the figures of the app. Since we deal with an unbalanced data set having many observations for certain categories while only a few data points for other categories. Hence, the results of the classification test should be interpreted with caution.
 
 ## How to use
 
 1. Run the following commands in the project's root directory to set up your database and model.
 
     - To run ETL pipeline that cleans data and stores in database <br>
-        `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/DisasterResponse.db`
+        `python data/process_data.py data/disaster_messages.csv data/disaster_categories.csv data/disaster_response.db`
     - To run ML pipeline that trains classifier and saves <br>
-        `python models/train_classifier.py data/DisasterResponse.db models/classifier.pkl`
+        `python models/train_classifier.py data/disaster_response.db models/classifier.pkl`
 
 2. Run the following command in the app's directory to run your web app. <br>
     `python run.py`

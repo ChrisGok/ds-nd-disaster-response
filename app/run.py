@@ -79,12 +79,12 @@ def index():
             ],
 
             'layout': {
-                'title': 'Title 2',
+                'title': 'Top 10 Categories',
                 'yaxis': {
                     'title': "Count"
                 },
                 'xaxis': {
-                    'title': "Genre"
+                    'title': "Category"
                 }
             }
         }
